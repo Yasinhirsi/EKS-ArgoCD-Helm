@@ -74,3 +74,21 @@ resource "helm_release" "argocd" {
     helm_release.external_dns
   ]
 }
+
+
+
+resource "helm_release" "kube_prom_stack" {
+  name       = "monitoring-stack"
+  repository = "https://prometheus-community.github.io/helm-charts"
+  chart      = "kube-prometheus-stack"
+
+  create_namespace = true
+  namespace        = "monitoring"
+
+  values = [
+    file("${path.module}/../helm-values/monitoring.yaml")
+  ]
+
+  depends_on = [helm_release.nginx_ingress, helm_release.cert_manager, helm_release.external_dns]
+}
+
