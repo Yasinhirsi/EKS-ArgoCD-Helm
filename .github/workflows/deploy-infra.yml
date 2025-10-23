@@ -160,7 +160,7 @@ jobs:
 
       - name: Deploy ArgoCD Application
         run: |
-          kubectl apply -f argo-cd/application.yaml
+          kubectl apply -f argocd/application.yaml
 
       - name: Wait for ArgoCD Server
         run: |
