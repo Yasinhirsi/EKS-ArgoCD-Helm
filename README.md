@@ -1,42 +1,57 @@
-# Run This App Locally
+# EKS OIDC Helm Prometheus Grafana
 
-_Ensure nodejs is installed first_
+AWS EKS infrastructure with GitHub Actions OIDC, ArgoCD GitOps, and Prometheus/Grafana monitoring.
 
+## Features
+
+![2048 Game Deployment](images/2048-secure.png)
+
+![ArgoCD Dashboard](images/argocd-1.png)
+
+![Prometheus Monitoring](images/prometheus-1.png)
+
+![Grafana Visualization](images/grafana-1.png)
+
+- Infrastructure as Code with Terraform
+- GitHub Actions CI/CD using OIDC (no long-lived credentials)
+- GitOps deployment with ArgoCD
+- Monitoring with Prometheus & Grafana
+- Automatic SSL certificates via cert-manager
+- DNS management with external-dns
+
+## Setup
+
+### Bootstrap OIDC
+
+```bash
+./scripts/bootstrap-oidc.sh
 ```
-node -v 
-npm -v
+
+### Deploy Infrastructure
+
+```bash
+cd terraform
+terraform init
+terraform apply
 ```
+
+### Configure kubectl
+
+```bash
+aws eks update-kubeconfig --name <cluster-name> --region <region>
 ```
-python -m http.server 3000
+
+## Cleanup
+
+```bash
+./scripts/cleanup.sh
 ```
 
-```
-http://localhost:3000/
-```
-# **Marking Criteria**
+## Stack
 
-| **Category**                   | **Points** | **Criteria**                                                                                                                                            |
-|--------------------------------|------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Board / Tickets**             | 10         | - Proper ticketing system in place (e.g., Jira / Trello etc.). <br> - Tasks broken down into logical, actionable steps. <br> - Progress tracked effectively.   |
-| **Terraform for AWS Infra**     | 15         | - EKS Cluster and VPC configured using Terraform. <br> - Reusable modules for infrastructure components. <br> - IAM roles and security groups properly configured. |
-| **NGINX Ingress Controller**    | 10         | - NGINX Ingress Controller successfully deployed on Kubernetes. <br> - Configured for Kubernetes Ingress traffic routing.                               |
-| **Monitoring Setup**            | 15         | - Prometheus and Grafana set up for cluster monitoring. <br> - Basic dashboard configured (e.g., high CPU/memory, pods, nodes, namespaces etc.)                            |
-| **Pipeline 1: Terraform**       | 10         | - Pipeline automates Terraform deployments for EKS infra (including modules). <br> - Includes proper state management and error handling.               |
-| **Pipeline 2: Security, Docker, Kubernetes** | 30  | - Includes Trivy and Checkov scans. <br> - Docker image build and push to ECR. <br> - Application deployed to EKS using Kubernetes manifests (If no ArgoCD). <br> - Pipeline automates secure deployments, ensuring error handling and compliance. |
+- **Infrastructure**: AWS EKS (1.31), VPC, IAM
+- **Kubernetes Add-ons**: NGINX Ingress, cert-manager, external-dns, ArgoCD
+- **Monitoring**: Prometheus, Grafana
+- **CI/CD**: GitHub Actions with OIDC
+- **Application**: 2048 game 
 
----
-
-# **Bonus Criteria**
-
-| **Category**                   | **Points** | **Criteria**                                                                                                                                            |
-|--------------------------------|------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **ArgoCD Integration**         | 15         | - ArgoCD set up for automated deployment to EKS.                                                                                                       |
-| **Architecture**               | 10         | - Clear and well-documented architecture design with diagrams (e.g., deployment flow, service communication).                                           |
-| **Helm**                       | 10         | - Helm charts used for application and infrastructure deployments.                                                                                      |
-| **CertManager**                | 10         | - CertManager configured for managing SSL/TLS certificates.                                                                               |
-| **ExternalDNS**                | 10         | - ExternalDNS configured for dynamic DNS updates based on Kubernetes ingress resources.
-
-
----
-
-### **Total Points: 150**
