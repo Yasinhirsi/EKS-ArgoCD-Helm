@@ -6,7 +6,9 @@ set -e  # Exit on error
 echo "Bootstrapping OIDC"
 echo ""
 
-cd terraform
+# Get script directory and navigate to project root
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$SCRIPT_DIR/../terraform"
 
 terraform apply \
   -target=aws_iam_openid_connect_provider.github_actions \
