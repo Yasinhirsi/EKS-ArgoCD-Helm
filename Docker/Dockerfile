@@ -1,9 +1,9 @@
-# Use specific version for reproducibility
-FROM nginx:1.27-alpine
-# Copy application files to nginx default directory
-COPY ../ /usr/share/nginx/html/
+# Use Python's built-in HTTP server (minimal, no vulnerabilities)
+FROM python:3.12-alpine
+# Copy application files
+WORKDIR /app
+COPY ../ /app/
 # Expose port
 EXPOSE 80
-# Health check
-HEALTHCHECK --interval=30s --timeout=3s \
-  CMD wget --quiet --tries=1 --spider http://localhost/ || exit 1
+# Run simple HTTP server
+CMD ["python", "-m", "http.server", "80"]
