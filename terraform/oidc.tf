@@ -41,7 +41,6 @@ resource "aws_iam_role" "github_actions_role" {
   tags = local.tags
 }
 
-
 # Policy 1: ECR Push Permissions
 resource "aws_iam_role_policy" "ecr_push_policy" {
   name = "ecr-push-policy"
@@ -74,7 +73,7 @@ resource "aws_iam_role_policy" "ecr_push_policy" {
   })
 }
 
-
+# Policy 2: EKS Access Permissions
 resource "aws_iam_role_policy" "eks_access_policy" {
   name = "eks-access-policy"
   role = aws_iam_role.github_actions_role.id
@@ -94,6 +93,7 @@ resource "aws_iam_role_policy" "eks_access_policy" {
   })
 }
 
+# Policy 3: S3 Backend Access
 resource "aws_iam_role_policy" "s3_backend_policy" {
   name = "s3-backend-policy"
   role = aws_iam_role.github_actions_role.id
@@ -116,6 +116,58 @@ resource "aws_iam_role_policy" "s3_backend_policy" {
           "s3:ListBucket"
         ]
         Resource = "arn:aws:s3:::eks-tfstate-ys"
+      }
+    ]
+  })
+}
+
+# Policy 4: Terraform Infrastructure Management (Service-level wildcards)
+resource "aws_iam_role_policy" "terraform_infra_policy" {
+  name = "terraform-infra-policy"
+  role = aws_iam_role.github_actions_role.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect   = "Allow"
+        Action   = "ec2:*"
+        Resource = "*"
+      },
+      {
+        Effect   = "Allow"
+        Action   = "eks:*"
+        Resource = "*"
+      },
+      {
+        Effect   = "Allow"
+        Action   = "iam:*"
+        Resource = "*"
+      },
+      {
+        Effect   = "Allow"
+        Action   = "logs:*"
+        Resource = "*"
+      },
+      {
+        Effect   = "Allow"
+        Action   = "autoscaling:*"
+        Resource = "*"
+      },
+      {
+        Effect   = "Allow"
+        Action   = "route53:*"
+        Resource = "*"
+      },
+      {
+        Effect   = "Allow"
+        Action   = "kms:*"
+        Resource = "*"
+      },
+      {
+        Effect   = "Allow"
+        Action   = "elasticloadbalancing:*"
+        Resource = "*"
       }
     ]
   })
