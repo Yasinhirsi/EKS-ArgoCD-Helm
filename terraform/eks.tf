@@ -13,6 +13,21 @@ module "eks" {
   subnet_ids                               = module.vpc.private_subnets
   control_plane_subnet_ids                 = module.vpc.public_subnets
 
+  # Grant IAM user access
+  access_entries = {
+    admin = {
+      principal_arn = "arn:aws:iam::487148038595:user/YS"
+      policy_associations = {
+        admin = {
+          policy_arn = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy"
+          access_scope = {
+            type = "cluster"
+          }
+        }
+      }
+    }
+  }
+
   eks_managed_node_group_defaults = {
     disk_size      = 50
     instance_types = ["t3a.large", "t3.large"]

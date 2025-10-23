@@ -1,0 +1,66 @@
+name: Destroy Infrastructure
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: 'Type "destroy" to confirm deletion'
+        required: true
+        type: string
+
+permissions:
+  id-token: write 
+  contents: read  
+
+env:
+  AWS_REGION: eu-west-2
+
+jobs:
+  confirm-destroy:
+    name: Confirm Destruction
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate confirmation
+        run: |
+          if [ "${{ github.event.inputs.confirm }}" != "destroy" ]; then
+            echo "Confirmation failed. You must type 'destroy' to proceed."
+            exit 1
+          fi
+          echo "Confirmation validated"
+
+  # Terraform destroy
+  terraform-destroy:
+    name: Terraform Destroy
+    runs-on: ubuntu-latest
+    needs: confirm-destroy
+    defaults:
+      run:
+        working-directory: ./terraform
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.12.2"
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          role-session-name: github-actions-destroy
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Destroy
+        run: terraform destroy -auto-approve
+
+      - name: Verify cleanup
+        run: |
+          echo ""
+          echo "Infrastructure destruction complete"
+          echo ""
+
