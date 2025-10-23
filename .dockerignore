@@ -1,0 +1,56 @@
+# Git
+.git
+.gitignore
+.github
+
+# Docker
+Docker/
+Dockerfile
+.dockerignore
+
+# Terraform
+terraform/
+*.tf
+*.tfvars
+*.tfstate
+*.tfstate.backup
+.terraform/
+
+# Kubernetes
+k8s/
+helm/
+*.yaml
+*.yml
+
+# Documentation
+*.md
+docs/
+CONTRIBUTING.md
+README.md
+
+# Ruby
+Rakefile
+
+# CI/CD
+.gitlab-ci.yml
+.circleci/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Node modules (if any)
+node_modules/
+package-lock.json
+
+# Build artifacts
+dist/
+build/
+

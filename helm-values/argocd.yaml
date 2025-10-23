@@ -1,0 +1,17 @@
+server:
+  extraArgs:
+    - --insecure #disables SSL redirection as nginx will handle 
+  service:
+    type: ClusterIP
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+    hostname: argocd.eks.yasinhirsi.com
+    tls: true
+    extraTls:
+      - secretName: argocd-ingress-tls
+        hosts:
+          - argocd.eks.yasinhirsi.com
+
