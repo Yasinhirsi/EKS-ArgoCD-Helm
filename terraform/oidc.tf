@@ -94,6 +94,33 @@ resource "aws_iam_role_policy" "eks_access_policy" {
   })
 }
 
+resource "aws_iam_role_policy" "s3_backend_policy" {
+  name = "s3-backend-policy"
+  role = aws_iam_role.github_actions_role.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "s3:GetObject",
+          "s3:PutObject",
+          "s3:DeleteObject"
+        ]
+        Resource = "arn:aws:s3:::eks-tfstate-ys/eks-proj"
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "s3:ListBucket"
+        ]
+        Resource = "arn:aws:s3:::eks-tfstate-ys"
+      }
+    ]
+  })
+}
+
 
 output "github_actions_role_arn" {
   description = "IAM role ARN for GitHub Actions OIDC"

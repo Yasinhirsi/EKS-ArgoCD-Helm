@@ -15,6 +15,7 @@ terraform apply \
   -target=aws_iam_role.github_actions_role \
   -target=aws_iam_role_policy.ecr_push_policy \
   -target=aws_iam_role_policy.eks_access_policy \
+  -target=aws_iam_role_policy.s3_backend_policy \
   -auto-approve
 
 echo ""
