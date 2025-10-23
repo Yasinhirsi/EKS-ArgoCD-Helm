@@ -1,5 +1,5 @@
 # Use specific version for reproducibility
-FROM nginx:alpine3.21
+FROM nginx:1.27-alpine
 # Copy application files to nginx default directory
 COPY ../ /usr/share/nginx/html/
 # Expose port
