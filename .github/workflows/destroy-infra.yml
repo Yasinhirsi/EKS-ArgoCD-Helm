@@ -55,8 +55,26 @@ jobs:
       - name: Terraform Init
         run: terraform init
 
-      - name: Terraform Destroy
-        run: terraform destroy -auto-approve
+      - name: Terraform Destroy (excluding OIDC)
+        run: |
+          # Destroy everything except OIDC resources to avoid authentication failure
+          terraform destroy -auto-approve \
+            -target=module.eks \
+            -target=module.vpc \
+            -target=helm_release.argocd \
+            -target=helm_release.cert_manager \
+            -target=helm_release.external_dns \
+            -target=helm_release.nginx_ingress \
+            -target=module.cert_manager_irsa_role \
+            -target=module.external_dns_irsa_role \
+            -target=module.monitoring_irsa_role
+      
+      - name: Manual OIDC Cleanup Notice
+        run: |
+          echo " OIDC resources were preserved to allow this workflow to complete."
+          echo "To complete the cleanup, run locally:"
+          echo "  terraform destroy -target=aws_iam_openid_connect_provider.github_actions"
+          echo "  terraform destroy -target=aws_iam_role.github_actions_role"
 
       - name: Verify cleanup
         run: |

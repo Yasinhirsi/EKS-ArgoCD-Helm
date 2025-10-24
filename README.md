@@ -2,6 +2,10 @@
 
 AWS EKS infrastructure with GitHub Actions OIDC, ArgoCD GitOps, and Prometheus/Grafana monitoring.
 
+## Architecture
+
+![Architecture Diagram](images/eks.gif)
+
 ## Features
 
 ![2048 Game Deployment](images/2048-secure.png)
@@ -43,8 +47,20 @@ aws eks update-kubeconfig --name <cluster-name> --region <region>
 
 ## Cleanup
 
+### Option 1: Local Cleanup (Recommended)
+
 ```bash
-./scripts/cleanup.sh
+cd terraform
+terraform destroy
+```
+
+### Option 2: GitHub Actions
+
+The destroy workflow excludes OIDC resources to prevent authentication failures. After running the workflow, manually clean up OIDC resources:
+
+```bash
+terraform destroy -target=aws_iam_openid_connect_provider.github_actions
+terraform destroy -target=aws_iam_role.github_actions_role
 ```
 
 ## Stack
