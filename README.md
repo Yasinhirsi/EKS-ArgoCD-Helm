@@ -8,13 +8,23 @@ AWS EKS infrastructure with GitHub Actions OIDC, ArgoCD GitOps, and Prometheus/G
 
 ## Features
 
+### Secure Application Deployment with HTTPS
+
 ![2048 Game Deployment](images/2048-secure.png)
+
+### GitOps with ArgoCD
 
 ![ArgoCD Dashboard](images/argocd-1.png)
 
+### Prometheus Metrics Collection
+
 ![Prometheus Monitoring](images/prometheus-1.png)
 
+### Grafana Observability Dashboards
+
 ![Grafana Visualization](images/grafana-1.png)
+
+### Key Capabilities
 
 - Infrastructure as Code with Terraform
 - GitHub Actions CI/CD using OIDC (no long-lived credentials)
